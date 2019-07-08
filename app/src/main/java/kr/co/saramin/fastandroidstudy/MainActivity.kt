@@ -1,8 +1,10 @@
 package kr.co.saramin.fastandroidstudy
 
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -10,6 +12,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.v("MainActivity", "onCreate")
         setContentView(R.layout.activity_main)
+        backButton.setOnClickListener {
+            onBackPressed()
+        }
+        nextButton.setOnClickListener {
+            centerText.text = "Welcome to hell"
+        }
+
+        backgroundSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                layoutContainer.setBackgroundColor(Color.parseColor("#444444"))
+            } else {
+                layoutContainer.setBackgroundColor(Color.parseColor("#999999"))
+            }
+        }
     }
 
     override fun onStart() {

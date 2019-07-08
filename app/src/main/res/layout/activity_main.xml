@@ -3,13 +3,14 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/layoutContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000000"
+        android:background="#999999"
         tools:context=".MainActivity">
 
     <TextView
-            android:id="@+id/hellworld"
+            android:id="@+id/centerText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -26,11 +27,12 @@
             android:layout_height="200dp"
             android:layout_margin="20dp"
             android:src="@mipmap/ic_launcher"
-            app:layout_constraintBottom_toTopOf="@id/hellworld"
+            app:layout_constraintBottom_toTopOf="@id/centerText"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
 
     <Button
+            android:id="@+id/nextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -42,6 +44,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
     <Button
+            android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -51,5 +54,12 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
+    <Switch android:id="@+id/backgroundSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/centerText"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_margin="20dp"
+            app:layout_constraintRight_toRightOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>
