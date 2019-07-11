@@ -45,23 +45,23 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        //1
-        profileImage.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View, event: MotionEvent): Boolean {
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        centerText.text = "Don't touch my face"
-                    }
-                    MotionEvent.ACTION_MOVE -> {
-                        centerText.text = "No, no.. do not rub"
-                    }
-                    MotionEvent.ACTION_UP -> {
-                        centerText.text = "OK, don't bother me again"
-                    }
-                }
-                return true
-            }
-        })
+//        //1
+//        profileImage.setOnTouchListener(object : View.OnTouchListener {
+//            override fun onTouch(v: View, event: MotionEvent): Boolean {
+//                when (event.action) {
+//                    MotionEvent.ACTION_DOWN -> {
+//                        centerText.text = "Don't touch my face"
+//                    }
+//                    MotionEvent.ACTION_MOVE -> {
+//                        centerText.text = "No, no.. do not rub"
+//                    }
+//                    MotionEvent.ACTION_UP -> {
+//                        centerText.text = "OK, don't bother me again"
+//                    }
+//                }
+//                return true
+//            }
+//        })
 //
 //        //2
 //        profileImage.setOnTouchListener(fun(view: View, event: MotionEvent): Boolean {
@@ -93,11 +93,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            /*when (조건) {
-                1 -> function1()
-                2 -> function2()
-                else -> function3()
-            }*/
+//            when (조건) {
+//                1 -> function1()
+//                2 -> function2()
+//                else -> function3()
+//            }
 
             true
         }
