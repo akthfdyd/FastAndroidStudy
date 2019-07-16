@@ -1,15 +1,55 @@
 package kr.co.saramin.fastandroidstudy
 
+import android.annotation.SuppressLint
 import android.graphics.Color
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.MotionEvent
-import android.view.View
-import android.widget.TextView
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    val MSG_LOG_HELLWORLD = 1000
+    val MSG_ACTIVITY_FINISH = 1001
+    val MSG_REPEAT_EVERY_5_SEC = 1002
+
+
+    // Handler 2
+    @SuppressLint("HandlerLeak")
+    private val handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            when (msg.what) {
+                MSG_LOG_HELLWORLD -> Log.v("MainActivity", "hell world")
+                MSG_ACTIVITY_FINISH -> onBackPressed()
+                MSG_REPEAT_EVERY_5_SEC -> toastMessage()
+            }
+        }
+    }
+
+
+    // Handler 3
+//    private val activity = WeakReference<MainActivity>(this)
+//    private val handler = MyHandler(activity)
+//
+//    class MyHandler(private val activity: WeakReference<MainActivity>) : Handler() {
+//        override fun handleMessage(msg: Message) {
+//            when (msg.what) {
+//                activity.get()?.MSG_LOG_HELLWORLD -> Log.v("MainActivity", "hell world")
+//                activity.get()?.MSG_ACTIVITY_FINISH -> activity.get()?.onBackPressed()
+////                activity.get()?.MSG_REPEAT_EVERY_5_SEC -> activity.get()?.toastMessage()
+//            }
+//        }
+//    }
+
+    fun toastMessage() {
+        Toast.makeText(this, "Developers try exit the Hell", Toast.LENGTH_SHORT).show()
+        handler.sendEmptyMessageDelayed(MSG_REPEAT_EVERY_5_SEC, 5000)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.v("MainActivity", "onCreate")
@@ -19,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
         nextButton.setOnClickListener { centerText.text = "Welcome to hell" }
 
-//        //1
+//        // OnClickListener 1
 //        centerText.setOnClickListener(object : View.OnClickListener {
 //            override fun onClick(v: View?) {
 //                v as TextView
@@ -27,12 +67,12 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        })
 
-//        //2
+//        // OnClickListener 2
 //        centerText.setOnClickListener(fun(it: View) {
 //            centerText.text = "Hell World"
 //        })
 
-        //3
+        // OnClickListener 3
         centerText.setOnClickListener { centerText.text = "Hell World" }
 
 
@@ -45,7 +85,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//        //1
+//        // OnTouchListener 1
 //        profileImage.setOnTouchListener(object : View.OnTouchListener {
 //            override fun onTouch(v: View, event: MotionEvent): Boolean {
 //                when (event.action) {
@@ -63,7 +103,7 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        })
 //
-//        //2
+//        // OnTouchListener 2
 //        profileImage.setOnTouchListener(fun(view: View, event: MotionEvent): Boolean {
 //            when (event.action) {
 //                MotionEvent.ACTION_DOWN -> {
@@ -79,7 +119,7 @@ class MainActivity : AppCompatActivity() {
 //            return true
 //        })
 
-        //3
+        // OnTouchListener 3
         profileImage.setOnTouchListener { view, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -101,6 +141,16 @@ class MainActivity : AppCompatActivity() {
 
             true
         }
+
+
+        // Handler 1
+        Handler().postDelayed({
+            Log.v("MainActivity", "Log after 2 second")
+        }, 2000)
+
+        handler.sendEmptyMessage(MSG_LOG_HELLWORLD)
+        handler.sendEmptyMessageDelayed(MSG_ACTIVITY_FINISH, 10000)
+        handler.sendEmptyMessage(MSG_REPEAT_EVERY_5_SEC)
     }
 
     override fun onStart() {
