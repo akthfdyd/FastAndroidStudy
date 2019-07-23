@@ -1,6 +1,7 @@
 package kr.co.saramin.fastandroidstudy
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -10,8 +11,9 @@ import android.util.Log
 import android.view.MotionEvent
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
-import android.R.attr.key
-import android.content.Intent
+import android.app.ActivityOptions
+import android.util.Pair
+import android.view.View
 
 
 class MainActivity : AppCompatActivity() {
@@ -97,7 +99,21 @@ class MainActivity : AppCompatActivity() {
         } else {
             intent.putExtra("backgroundColor", Color.parseColor("#999999"))
         }
-        startActivityForResult(intent, REQUEST_SECOND_ACTIVITY)
+        intent.putExtra("title", centerText.text.toString())
+
+        // 1 Anim XML transition
+//        startActivityForResult(intent, REQUEST_SECOND_ACTIVITY)
+//        overridePendingTransition(R.anim.fade_in, R.anim.nothing)
+
+        // 2 Styles XML transition
+//        val options = ActivityOptions.makeSceneTransitionAnimation(this)
+//        startActivityForResult(intent, REQUEST_SECOND_ACTIVITY, options.toBundle())
+
+        // 3 Hero animation
+        val pair0 = Pair<View, String>(profileImage, "profileImage")
+        val pair1 = Pair<View, String>(centerText, "titleText")
+        val options = ActivityOptions.makeSceneTransitionAnimation(this, pair0, pair1)
+        startActivityForResult(intent, REQUEST_SECOND_ACTIVITY, options.toBundle())
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

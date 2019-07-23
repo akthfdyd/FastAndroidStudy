@@ -15,5 +15,17 @@ class SecondActivity : AppCompatActivity() {
         // ?.let <- run block with 'it' if it is not null
         val backgroundColor: Int? = intent?.extras?.getInt("backgroundColor")
         backgroundColor?.let { layoutContainer.setBackgroundColor(it) }
+
+        titleText.text = intent?.extras?.getString("title")
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.nothing, R.anim.fade_out)
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.nothing, R.anim.fade_out)
     }
 }
