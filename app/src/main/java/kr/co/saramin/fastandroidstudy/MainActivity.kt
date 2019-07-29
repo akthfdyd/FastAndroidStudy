@@ -179,8 +179,8 @@ class MainActivity : AppCompatActivity() {
 
         val service = retrofit.create(Api::class.java)
 
-        val repos = service.getPostData()
-        repos.enqueue(object : Callback<okhttp3.ResponseBody> {
+        val blogPost = service.getPostData()
+        blogPost.enqueue(object : Callback<okhttp3.ResponseBody> {
             override fun onResponse(call: Call<okhttp3.ResponseBody>, response: Response<okhttp3.ResponseBody>) {
                 try {
                     val result = response.body()?.string()

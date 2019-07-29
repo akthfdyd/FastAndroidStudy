@@ -49,8 +49,8 @@ class SecondActivity : AppCompatActivity() {
 
         val service = retrofit.create(Api::class.java)
 
-        val repos = service.getPostData()
-        repos.enqueue(object : Callback<ResponseBody> {
+        val blogPost = service.getPostData()
+        blogPost.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 try {
                     val result = response.body()?.string()
