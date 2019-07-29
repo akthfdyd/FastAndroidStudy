@@ -14,6 +14,15 @@ import kotlinx.android.synthetic.main.activity_main.*
 import android.app.ActivityOptions
 import android.util.Pair
 import android.view.View
+import com.google.gson.Gson
+import kr.co.saramin.fastandroidstudy.network.Api
+import kr.co.saramin.fastandroidstudy.vo.BlogPostResponse
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,23 +34,7 @@ class MainActivity : AppCompatActivity() {
     val REQUEST_SECOND_ACTIVITY = 2000
     val REQUEST_THIRD_ACTIVITY = 2001
 
-
-    @SuppressLint("HandlerLeak")
-    private val handler = object : Handler() {
-        override fun handleMessage(msg: Message) {
-            when (msg.what) {
-                MSG_LOG_HELLWORLD -> Log.v("MainActivity", "hell world")
-                MSG_ACTIVITY_FINISH -> onBackPressed()
-                MSG_REPEAT_EVERY_5_SEC -> toastMessage()
-            }
-        }
-    }
-
-    fun toastMessage() {
-        Toast.makeText(this, "Developers try exit the Hell", Toast.LENGTH_SHORT).show()
-        handler.sendEmptyMessageDelayed(MSG_REPEAT_EVERY_5_SEC, 5000)
-    }
-
+    // Chapter #2. Activity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.v("MainActivity", "onCreate")
@@ -51,11 +44,45 @@ class MainActivity : AppCompatActivity() {
 //        handlerTests()
     }
 
+    override fun onStart() {
+        Log.v("MainActivity", "onStart")
+        super.onStart()
+    }
+
+    override fun onStop() {
+        Log.v("MainActivity", "onStop")
+        super.onStop()
+    }
+
+    override fun onPause() {
+        Log.v("MainActivity", "onPause")
+        super.onPause()
+    }
+
+    override fun onResume() {
+        Log.v("MainActivity", "onResume")
+        super.onResume()
+    }
+
+    override fun onRestart() {
+        Log.v("MainActivity", "onRestart")
+        super.onRestart()
+    }
+
+    override fun onDestroy() {
+        Log.v("MainActivity", "onDestroy")
+        super.onDestroy()
+    }
+
+
+    // Chapter #4. Listener
     fun initListener() {
         backButton.setOnClickListener { onBackPressed() }
-        centerText.setOnClickListener { centerText.text = "Hell World" }
+        centerText.setOnClickListener {
+            centerText.text = "Hell World"
+            urlConnection()
+        }
         nextButton.setOnClickListener { startSecondActivity() }
-
 
         backgroundSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -81,6 +108,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    // Chapter #5. Handler
+    @SuppressLint("HandlerLeak")
+    private val handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            when (msg.what) {
+                MSG_LOG_HELLWORLD -> Log.v("MainActivity", "hell world")
+                MSG_ACTIVITY_FINISH -> onBackPressed()
+                MSG_REPEAT_EVERY_5_SEC -> toastMessage()
+            }
+        }
+    }
+
+    fun toastMessage() {
+        Toast.makeText(this, "Developers try exit the Hell", Toast.LENGTH_SHORT).show()
+        handler.sendEmptyMessageDelayed(MSG_REPEAT_EVERY_5_SEC, 5000)
+    }
+
 //    fun handlerTests() {
 //        // Handler 1
 //        Handler().postDelayed({
@@ -92,6 +137,7 @@ class MainActivity : AppCompatActivity() {
 //    }
 
 
+    // Chapter #6. Intent, Transition
     fun startSecondActivity() {
         val intent = Intent(this, SecondActivity::class.java)
         if (backgroundSwitch.isChecked) {
@@ -125,33 +171,43 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    override fun onStart() {
-        Log.v("MainActivity", "onStart")
-        super.onStart()
+    // Chapter #7. Retrofit, Gson
+    fun urlConnection() {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://projectevey.000webhostapp.com")
+            .build()
+
+        val service = retrofit.create(Api::class.java)
+
+        val repos = service.getPostData()
+        repos.enqueue(object : Callback<okhttp3.ResponseBody> {
+            override fun onResponse(call: Call<okhttp3.ResponseBody>, response: Response<okhttp3.ResponseBody>) {
+                try {
+                    val result = response.body()?.string()
+//                    Log.v("MainActivity", "urlConnection() onResponse >> " + result)
+
+                    val jsonObject = JSONObject(result)
+                    val title = jsonObject.getJSONObject("title").get("rendered")
+                    Log.v("MainActivity", "urlConnection() onResponse JSONObject >> " + title)
+
+                    val blogPostResponse = Gson().fromJson(result, BlogPostResponse::class.java)
+                    Log.v("MainActivity", "urlConnection() onResponse GSON >> " + blogPostResponse?.title?.rendered)
+
+                    showResponseData(blogPostResponse)
+                } catch (e: Exception) {
+                    Log.v("MainActivity", "urlConnection() exception >> " + e.message)
+                }
+            }
+
+            override fun onFailure(call: Call<okhttp3.ResponseBody>, t: Throwable) {
+                Log.v("MainActivity", "urlConnection() onFailure >> " + t.message)
+            }
+        })
     }
 
-    override fun onStop() {
-        Log.v("MainActivity", "onStop")
-        super.onStop()
+    private fun showResponseData(blogPostResponse: BlogPostResponse?) {
+        centerText.text = blogPostResponse?.title?.rendered
     }
 
-    override fun onPause() {
-        Log.v("MainActivity", "onPause")
-        super.onPause()
-    }
 
-    override fun onResume() {
-        Log.v("MainActivity", "onResume")
-        super.onResume()
-    }
-
-    override fun onRestart() {
-        Log.v("MainActivity", "onRestart")
-        super.onRestart()
-    }
-
-    override fun onDestroy() {
-        Log.v("MainActivity", "onDestroy")
-        super.onDestroy()
-    }
 }
