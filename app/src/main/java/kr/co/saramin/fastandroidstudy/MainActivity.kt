@@ -1,6 +1,7 @@
 package kr.co.saramin.fastandroidstudy
 
 import android.annotation.SuppressLint
+import android.app.ActivityOptions
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -8,13 +9,12 @@ import android.os.Handler
 import android.os.Message
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.MotionEvent
-import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_main.*
-import android.app.ActivityOptions
 import android.util.Pair
+import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.activity_main.*
 import kr.co.saramin.fastandroidstudy.network.Api
 import kr.co.saramin.fastandroidstudy.vo.BlogPostResponse
 import org.json.JSONObject
@@ -22,7 +22,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity() {
@@ -184,16 +183,18 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call<okhttp3.ResponseBody>, response: Response<okhttp3.ResponseBody>) {
                 try {
                     val result = response.body()?.string()
-//                    Log.v("MainActivity", "urlConnection() onResponse >> " + result)
+                    Log.v("MainActivity", "urlConnection() onResponse >> " + result)
 
-                    val jsonObject = JSONObject(result)
-                    val title = jsonObject.getJSONObject("title").get("rendered")
-                    Log.v("MainActivity", "urlConnection() onResponse JSONObject >> " + title)
-
+                    // traditional way
+//                    val jsonObject = JSONObject(result)
+//                    val title = jsonObject.getJSONObject("title").get("rendered")
+//                    Log.v("MainActivity", "urlConnection() onResponse JSONObject >> " + title)
+//                    showResponseData(title.toString())
+//
+                    // use GSON
                     val blogPostResponse = Gson().fromJson(result, BlogPostResponse::class.java)
                     Log.v("MainActivity", "urlConnection() onResponse GSON >> " + blogPostResponse?.title?.rendered)
-
-                    showResponseData(blogPostResponse)
+                    showResponseData(blogPostResponse?.title?.rendered.toString())
                 } catch (e: Exception) {
                     Log.v("MainActivity", "urlConnection() exception >> " + e.message)
                 }
@@ -205,8 +206,8 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun showResponseData(blogPostResponse: BlogPostResponse?) {
-        centerText.text = blogPostResponse?.title?.rendered
+    private fun showResponseData(str: String) {
+        centerText.text = str
     }
 
 

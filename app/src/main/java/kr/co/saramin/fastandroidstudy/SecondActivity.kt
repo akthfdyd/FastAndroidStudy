@@ -6,7 +6,7 @@ import android.util.Log
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_second.*
 import kr.co.saramin.fastandroidstudy.network.Api
-import kr.co.saramin.fastandroidstudy.vo.BlogPostResponse
+import kr.co.saramin.fastandroidstudy.vo.BlogPostResponseModel
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,8 +44,8 @@ class SecondActivity : AppCompatActivity() {
     // Chapter #7. Retrofit, Gson
     fun urlConnection() {
         val retrofit = Retrofit.Builder()
-                .baseUrl("https://projectevey.000webhostapp.com")
-                .build()
+            .baseUrl("https://projectevey.000webhostapp.com")
+            .build()
 
         val service = retrofit.create(Api::class.java)
 
@@ -54,22 +54,22 @@ class SecondActivity : AppCompatActivity() {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 try {
                     val result = response.body()?.string()
-                    Log.v("SecondActivity", "urlConnection() onResponse >> " + result)
-                    val blogPostResponse = Gson().fromJson(result, BlogPostResponse::class.java)
+                    Log.v("SecondActivity", "urlConnection() onResponse >> $result")
+                    val blogPostResponse = Gson().fromJson(result, BlogPostResponseModel::class.java)
                     showResponseData(blogPostResponse)
                 } catch (e: Exception) {
-                    Log.v("SecondActivity", "urlConnection() exception >> " + e.message)
+                    Log.v("SecondActivity", "urlConnection() exception >> ${e.message}")
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Log.v("SecondActivity", "urlConnection() onFailure >> " + t.message)
+                Log.v("SecondActivity", "urlConnection() onFailure >> ${t.message}")
             }
         })
     }
 
-    private fun showResponseData(blogPostResponse: BlogPostResponse?) {
+    private fun showResponseData(blogPostResponse: BlogPostResponseModel?) {
         titleText.text = blogPostResponse?.title?.rendered
-        contentText.loadData(blogPostResponse?.content?.rendered, "text/html", "UTF-8")
+        contentWebView.loadData(blogPostResponse?.content?.rendered, "text/html", "UTF-8")
     }
 }
