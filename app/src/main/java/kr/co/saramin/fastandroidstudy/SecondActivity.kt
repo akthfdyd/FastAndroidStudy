@@ -26,7 +26,8 @@ class SecondActivity : AppCompatActivity() {
         backgroundColor?.let { layoutContainer.setBackgroundColor(it) }
 
         titleText.text = intent?.extras?.getString("title")
-        urlConnection()
+        contentWebView.loadData(intent?.extras?.getString("content"), "text/html", "UTF-8")
+//        urlConnection()
     }
 
     // Chapter #6. Intent, Transition
@@ -44,8 +45,8 @@ class SecondActivity : AppCompatActivity() {
     // Chapter #7. Retrofit, Gson
     fun urlConnection() {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://projectevey.000webhostapp.com")
-            .build()
+                .baseUrl("https://projectevey.000webhostapp.com")
+                .build()
 
         val service = retrofit.create(Api::class.java)
 

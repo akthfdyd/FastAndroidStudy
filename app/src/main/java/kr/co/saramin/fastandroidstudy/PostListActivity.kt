@@ -2,7 +2,6 @@ package kr.co.saramin.fastandroidstudy
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_post_list.*
@@ -21,9 +20,6 @@ class PostListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_list)
 
-        val linearLayoutManager = LinearLayoutManager(this)
-        postListView.layoutManager = linearLayoutManager
-
         getPostList()
     }
 
@@ -39,11 +35,11 @@ class PostListActivity : AppCompatActivity() {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 try {
                     val result = response.body()?.string()
-                    Log.v("SecondActivity", "urlConnection() onResponse >> $result")
-                    val blogPostResponse = Gson().fromJson(result, Array<BlogPostResponseModel>::class.java)
-                    onSuccessGetPostList(blogPostResponse)
+                    Log.v("PostListActivity", "urlConnection() onResponse >> $result")
+                    val blogPostResponseArray = Gson().fromJson(result, Array<BlogPostResponseModel>::class.java)
+                    onSuccessGetPostList(blogPostResponseArray)
                 } catch (e: Exception) {
-                    Log.v("SecondActivity", "urlConnection() exception >> ${e.message}")
+                    Log.v("PostListActivity", "urlConnection() exception >> ${e.message}")
                 }
             }
 

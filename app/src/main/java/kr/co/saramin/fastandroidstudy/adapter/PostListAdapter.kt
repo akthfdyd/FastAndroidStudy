@@ -11,6 +11,7 @@ import kr.co.saramin.fastandroidstudy.R
 import kr.co.saramin.fastandroidstudy.SecondActivity
 import kr.co.saramin.fastandroidstudy.vo.BlogPostResponseModel
 
+// #8. RecyclerView
 class PostListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var listData: List<BlogPostResponseModel>
 
@@ -39,6 +40,8 @@ class PostListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             container.setOnClickListener {
                 val intent = Intent(itemView.context, SecondActivity::class.java)
+                intent.putExtra("title", data.title?.rendered)
+                intent.putExtra("content", data.content?.rendered)
                 itemView.context.startActivity(intent)
             }
         }
