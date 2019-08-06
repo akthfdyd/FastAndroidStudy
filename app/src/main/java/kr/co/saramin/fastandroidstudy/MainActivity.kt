@@ -16,8 +16,7 @@ import android.widget.Toast
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 import kr.co.saramin.fastandroidstudy.network.Api
-import kr.co.saramin.fastandroidstudy.vo.BlogPostResponse
-import org.json.JSONObject
+import kr.co.saramin.fastandroidstudy.vo.BlogPostResponseModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -192,7 +191,7 @@ class MainActivity : AppCompatActivity() {
 //                    showResponseData(title.toString())
 //
                     // use GSON
-                    val blogPostResponse = Gson().fromJson(result, BlogPostResponse::class.java)
+                    val blogPostResponse = Gson().fromJson(result, BlogPostResponseModel::class.java)
                     Log.v("MainActivity", "urlConnection() onResponse GSON >> " + blogPostResponse?.title?.rendered)
                     showResponseData(blogPostResponse?.title?.rendered.toString())
                 } catch (e: Exception) {

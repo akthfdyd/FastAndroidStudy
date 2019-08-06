@@ -8,4 +8,7 @@ import retrofit2.http.GET
 interface Api {
     @GET("/wp-json/wp/v2/posts/213")
     fun getPostData(): Call<ResponseBody>
+
+    @GET("/wp-json/wp/v2/posts/")
+    fun getPostListData(): Call<ResponseBody>
 }
