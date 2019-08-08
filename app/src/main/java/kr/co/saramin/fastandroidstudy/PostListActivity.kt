@@ -6,6 +6,7 @@ import android.util.Log
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_post_list.*
 import kr.co.saramin.fastandroidstudy.adapter.PostListAdapter
+import kr.co.saramin.fastandroidstudy.data.Preferences
 import kr.co.saramin.fastandroidstudy.network.Api
 import kr.co.saramin.fastandroidstudy.vo.BlogPostResponseModel
 import okhttp3.ResponseBody
@@ -20,13 +21,19 @@ class PostListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_list)
 
+        val preload = Preferences.getInstance(this@PostListActivity).saveDataString
+        if (preload != "") {
+            val postArrayPreload = Gson().fromJson(preload, Array<BlogPostResponseModel>::class.java)
+            onSuccessGetPostList(postArrayPreload)
+        }
+
         getPostList()
     }
 
     private fun getPostList() {
         val retrofit = Retrofit.Builder()
-                .baseUrl("https://projectevey.000webhostapp.com")
-                .build()
+            .baseUrl("https://projectevey.000webhostapp.com")
+            .build()
 
         val service = retrofit.create(Api::class.java)
 
@@ -36,6 +43,9 @@ class PostListActivity : AppCompatActivity() {
                 try {
                     val result = response.body()?.string()
                     Log.v("PostListActivity", "urlConnection() onResponse >> $result")
+                    if (result != null) {
+                        Preferences.getInstance(this@PostListActivity).saveDataString = result
+                    }
                     val blogPostResponseArray = Gson().fromJson(result, Array<BlogPostResponseModel>::class.java)
                     onSuccessGetPostList(blogPostResponseArray)
                 } catch (e: Exception) {
@@ -54,10 +64,6 @@ class PostListActivity : AppCompatActivity() {
         val listAdapter = PostListAdapter()
         listAdapter.listData = result.toList()
         postListView.adapter = listAdapter
-    }
-
-    private fun onErrorGetSelQuestionSet(error: Throwable?) {
-
     }
 
 }
