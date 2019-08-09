@@ -15,15 +15,14 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 
-class PostListActivity : AppCompatActivity() {
 
-    val pref = Preferences.getInstance(this)
+class PostListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_list)
 
-        val preload = pref.saveDataString
+        val preload = Preferences.getInstance(this).saveDataString
         if (preload != "") {
             val postArrayPreload = Gson().fromJson(preload, Array<BlogPostResponseModel>::class.java)
             onSuccessGetPostList(postArrayPreload)
@@ -46,7 +45,7 @@ class PostListActivity : AppCompatActivity() {
                     val result = response.body()?.string()
                     Log.v("PostListActivity", "urlConnection() onResponse >> $result")
                     if (result != null) {
-                        pref.saveDataString = result
+                        Preferences.getInstance(this@PostListActivity).saveDataString = result
                     }
                     val blogPostResponseArray = Gson().fromJson(result, Array<BlogPostResponseModel>::class.java)
                     onSuccessGetPostList(blogPostResponseArray)
