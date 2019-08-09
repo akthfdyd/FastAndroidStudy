@@ -13,7 +13,7 @@ class Preferences private constructor() {
     }
 
     var saveDataString: String
-        get() = preferences!!.getString("saveDataString", "") ?: ""
+        get() = preferences?.getString("saveDataString", "") ?: ""
         set(userName) {
             preferences!!.edit().putString("saveDataString", userName).commit()
         }
