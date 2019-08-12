@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import kr.co.saramin.fastandroidstudy.R
 import kr.co.saramin.fastandroidstudy.SecondActivity
+import kr.co.saramin.fastandroidstudy.WebViewActivity
 import kr.co.saramin.fastandroidstudy.vo.BlogPostResponseModel
 
 // #8. RecyclerView
@@ -39,9 +40,10 @@ class PostListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             title.text = data.title?.rendered
 
             container.setOnClickListener {
-                val intent = Intent(itemView.context, SecondActivity::class.java)
+                val intent = Intent(itemView.context, WebViewActivity::class.java)
                 intent.putExtra("title", data.title?.rendered)
                 intent.putExtra("content", data.content?.rendered)
+                intent.putExtra("link", data.link)
                 itemView.context.startActivity(intent)
             }
         }

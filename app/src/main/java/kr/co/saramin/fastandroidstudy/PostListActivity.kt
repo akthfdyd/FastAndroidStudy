@@ -3,12 +3,15 @@ package kr.co.saramin.fastandroidstudy
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_post_list.*
 import kr.co.saramin.fastandroidstudy.adapter.PostListAdapter
 import kr.co.saramin.fastandroidstudy.data.Preferences
 import kr.co.saramin.fastandroidstudy.network.Api
+import kr.co.saramin.fastandroidstudy.network.RetroApi
 import kr.co.saramin.fastandroidstudy.vo.BlogPostResponseModel
+import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,13 +35,19 @@ class PostListActivity : AppCompatActivity() {
     }
 
     private fun getPostList() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://projectevey.000webhostapp.com")
-            .build()
+//        val okHttp = OkHttpClient.Builder().addNetworkInterceptor(StethoInterceptor()).build()
+//
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl("https://projectevey.000webhostapp.com")
+//            .client(okHttp)
+//            .build()
+//
+//        val service = retrofit.create(Api::class.java)
 
-        val service = retrofit.create(Api::class.java)
+//        val blogPost = service.getPostListData()
 
-        val blogPost = service.getPostListData()
+        val blogPost = RetroApi.create().getPostListData()
+
         blogPost.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 try {
