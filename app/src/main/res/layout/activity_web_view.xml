@@ -7,6 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".WebViewActivity">
 
+    <LinearLayout
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:focusable="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:focusableInTouchMode="true" />
+
     <EditText
         android:id="@+id/urlBar"
         android:layout_width="match_parent"
@@ -75,13 +83,18 @@
         app:layout_constraintLeft_toRightOf="@id/homeButton"
         app:layout_constraintRight_toRightOf="parent" />
 
-
-    <WebView
-        android:id="@+id/webView"
+    <FrameLayout
+        android:id="@+id/webviewContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/prevButton"
-        app:layout_constraintTop_toBottomOf="@id/urlBar" />
+        app:layout_constraintTop_toBottomOf="@id/urlBar">
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 
     <android.support.v4.widget.ContentLoadingProgressBar
         android:id="@+id/progressBar"

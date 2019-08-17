@@ -3,20 +3,16 @@ package kr.co.saramin.fastandroidstudy
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_post_list.*
 import kr.co.saramin.fastandroidstudy.adapter.PostListAdapter
 import kr.co.saramin.fastandroidstudy.data.Preferences
-import kr.co.saramin.fastandroidstudy.network.Api
 import kr.co.saramin.fastandroidstudy.network.RetroApi
 import kr.co.saramin.fastandroidstudy.vo.BlogPostResponseModel
-import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
 
 
 class PostListActivity : AppCompatActivity() {
