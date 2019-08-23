@@ -14,6 +14,7 @@ import android.transition.Transition
 import android.transition.TransitionManager
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.webkit.*
 import android.widget.Toast
@@ -33,11 +34,6 @@ class WebViewActivity : AppCompatActivity() {
 
         setListener()
 
-        webView.settings.javaScriptEnabled = true
-        webView.settings.javaScriptCanOpenWindowsAutomatically = true
-        webView.settings.setSupportMultipleWindows(true)
-        webView.webViewClient = CustomWebViewClient()
-        webView.webChromeClient = CustomWebChromeClient()
         settingWebView(webView)
 
         webViewList = ArrayList()
@@ -51,32 +47,30 @@ class WebViewActivity : AppCompatActivity() {
         urlBar.setOnEditorActionListener { view, actionId, event ->
             var handled = false
             if (actionId == EditorInfo.IME_ACTION_GO) {
-                webView.loadUrl(view.text.toString())
+                getTopWebView()?.loadUrl(view.text.toString())
                 handled = true
             }
             handled
         }
         prevButton.setOnClickListener {
-            if (webView.canGoBack()) {
-                webView.goBack()
-            }
+            getTopWebView()?.goBack()
         }
         nextButton.setOnClickListener {
-            if (webView.canGoForward()) {
-                webView.goForward()
-            }
+            getTopWebView()?.goForward()
         }
         reloadButton.setOnClickListener {
-            webView.reload()
+            getTopWebView()?.reload()
         }
         homeButton.setOnClickListener {
-            webView.loadUrl(intent.extras?.getString("link"))
-            webView.clearHistory()
+            getTopWebView()?.loadUrl(intent.extras?.getString("link"))
+            getTopWebView()?.clearHistory()
         }
         sendButton.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(webView.url)))
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getTopWebView()?.url)))
         }
     }
+
+    private fun getTopWebView() = webViewList?.get(webViewList!!.size - 1)
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun settingWebView(view: WebView) {
@@ -108,7 +102,10 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     private inner class CustomWebViewClient : WebViewClient() {
-        override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+        override fun shouldOverrideUrlLoading(
+            view: WebView?,
+            request: WebResourceRequest?
+        ): Boolean {
             Log.v(TAG, "shouldOverrideUrlLoading ${request?.url.toString()}")
             val uri = URI(request?.url.toString())
             Log.v(
@@ -131,7 +128,11 @@ class WebViewActivity : AppCompatActivity() {
             super.onPageFinished(view, url)
         }
 
-        override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+        override fun onReceivedError(
+            view: WebView?,
+            request: WebResourceRequest?,
+            error: WebResourceError?
+        ) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Log.v(TAG, "onReceivedError ${error?.errorCode}")
             }
@@ -163,7 +164,12 @@ class WebViewActivity : AppCompatActivity() {
             return true
         }
 
-        override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+        override fun onJsAlert(
+            view: WebView?,
+            url: String?,
+            message: String?,
+            result: JsResult?
+        ): Boolean {
             val builder = AlertDialog.Builder(this@WebViewActivity)
             builder.setTitle("알림")
                 .setMessage("$message")
@@ -176,7 +182,12 @@ class WebViewActivity : AppCompatActivity() {
             return super.onJsAlert(view, url, message, result)
         }
 
-        override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+        override fun onJsConfirm(
+            view: WebView?,
+            url: String?,
+            message: String?,
+            result: JsResult?
+        ): Boolean {
             val builder = AlertDialog.Builder(this@WebViewActivity)
             builder.setTitle("알림")
                 .setMessage("$message")
