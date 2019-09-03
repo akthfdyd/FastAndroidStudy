@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import kr.co.saramin.fastandroidstudy.R
-import kr.co.saramin.fastandroidstudy.SecondActivity
 import kr.co.saramin.fastandroidstudy.WebViewActivity
 import kr.co.saramin.fastandroidstudy.vo.BlogPostResponseModel
 
@@ -45,6 +44,7 @@ class PostListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             title.text = data.title?.rendered
             userName.text = data.embedded?.author?.first()?.name
+
             val featuredImageUrl =
                 data.embedded?.wpFeaturedmedia?.first()?.mediaDetails?.sizes?.large?.sourceUrl ?: ""
             val profileImageUrl = data.embedded?.author?.first()?.avatarUrls?.x96 ?: ""
