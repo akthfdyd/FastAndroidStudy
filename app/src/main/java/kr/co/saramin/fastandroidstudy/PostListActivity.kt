@@ -72,4 +72,38 @@ class PostListActivity : AppCompatActivity() {
         postListView.adapter = listAdapter
     }
 
+
+
+    private fun getImageList() {
+        val blogPost = RetroApi.create().getPostListData()
+
+        blogPost.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                try {
+                    val result = response.body()?.string()
+                    Log.v("PostListActivity", "urlConnection() onResponse >> $result")
+                    if (result != null) {
+                        Preferences.getInstance(this@PostListActivity).saveDataString = result
+                    }
+                    val blogPostResponseArray = Gson().fromJson(result, Array<BlogPostResponseModel>::class.java)
+                    onSuccessGetImageList(blogPostResponseArray)
+                } catch (e: Exception) {
+                    Log.v("PostListActivity", "urlConnection() exception >> ${e.message}")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.v("SecondActivity", "urlConnection() onFailure >> ${t.message}")
+            }
+        })
+    }
+
+
+    private fun onSuccessGetImageList(result: Array<BlogPostResponseModel>) {
+        val listAdapter = PostListAdapter()
+        listAdapter.listData = result.toList()
+        postListView.adapter = listAdapter
+    }
+
+
 }

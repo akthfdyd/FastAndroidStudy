@@ -9,6 +9,6 @@ interface Api {
     @GET("/wp-json/wp/v2/posts/213")
     fun getPostData(): Call<ResponseBody>
 
-    @GET("/wp-json/wp/v2/posts?per_page=100")
+    @GET("/wp-json/wp/v2/posts?per_page=100&_embed")
     fun getPostListData(): Call<ResponseBody>
 }

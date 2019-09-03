@@ -82,15 +82,20 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (webViewList?.get(webViewList!!.size - 1)?.canGoBack()!!) {
-            webViewList!!.get(webViewList!!.size - 1).goBack()
+        val viewNumber = webViewList!!.size - 1
+
+        if (webViewList?.get(viewNumber)?.canGoBack()!!) {
+            webViewList!![viewNumber].goBack()
+
         } else if (webViewList!!.size > 1) {
-            val viewNumber = webViewList!!.size - 1
-            val transitionType: Transition = Slide(Gravity.BOTTOM)
-            TransitionManager.beginDelayedTransition(webviewContainer, transitionType)
+
+//            val transitionType: Transition = Slide(Gravity.BOTTOM)
+//            TransitionManager.beginDelayedTransition(webviewContainer, transitionType)
+
             webviewContainer.removeView(webViewList?.get(viewNumber))
             webViewList?.get(viewNumber)!!.destroy()
             webViewList?.removeAt(viewNumber)
+
             refreshWebViewCount()
         } else {
             finish()
@@ -148,6 +153,7 @@ class WebViewActivity : AppCompatActivity() {
             resultMsg: Message?
         ): Boolean {
             Log.v("MainActivity", "onCreateWindow")
+
             val newWebView = WebView(this@WebViewActivity)
             settingWebView(newWebView)
 
@@ -156,8 +162,10 @@ class WebViewActivity : AppCompatActivity() {
 
             webviewContainer.addView(newWebView)
             webViewList?.add(newWebView)
+
             refreshWebViewCount()
             Log.v("MainActivity", "webview added >> " + webViewList.toString())
+
             val transport = resultMsg?.obj as WebView.WebViewTransport
             transport.webView = newWebView
             resultMsg.sendToTarget()
