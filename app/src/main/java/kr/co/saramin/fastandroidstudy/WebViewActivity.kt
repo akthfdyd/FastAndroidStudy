@@ -32,6 +32,8 @@ class WebViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_web_view)
 
+        WebView.setWebContentsDebuggingEnabled(true)
+
         setListener()
 
         settingWebView(webView)
