@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_post_list.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kr.co.saramin.fastandroidstudy.adapter.PostListAdapter
 import kr.co.saramin.fastandroidstudy.data.Preferences
 import kr.co.saramin.fastandroidstudy.network.RetroApi
@@ -21,16 +23,21 @@ class PostListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_list)
 
-        val preload = Preferences.getInstance(this).saveDataString
-        if (preload != "") {
-            val postArrayPreload = Gson().fromJson(preload, Array<BlogPostResponseModel>::class.java)
-            onSuccessGetPostList(postArrayPreload)
-        }
+//        val preload = Preferences.getInstance(this).saveDataString
+//        if (preload != "") {
+//            val postArrayPreload =
+//                Gson().fromJson(preload, Array<BlogPostResponseModel>::class.java)
+//            onSuccessGetPostList(postArrayPreload)
+//        }
 
-        getPostList()
+//        getPostList()
+
+        getPostListOnCoroutineScope()
     }
 
     private fun getPostList() {
+
+        // new client way
 //        val okHttp = OkHttpClient.Builder().addNetworkInterceptor(StethoInterceptor()).build()
 //
 //        val retrofit = Retrofit.Builder()
@@ -39,9 +46,9 @@ class PostListActivity : AppCompatActivity() {
 //            .build()
 //
 //        val service = retrofit.create(Api::class.java)
-
 //        val blogPost = service.getPostListData()
 
+        // creator wrapping way
         val blogPost = RetroApi.create().getPostListData()
 
         blogPost.enqueue(object : Callback<ResponseBody> {
@@ -52,7 +59,8 @@ class PostListActivity : AppCompatActivity() {
                     if (result != null) {
                         Preferences.getInstance(this@PostListActivity).saveDataString = result
                     }
-                    val blogPostResponseArray = Gson().fromJson(result, Array<BlogPostResponseModel>::class.java)
+                    val blogPostResponseArray =
+                        Gson().fromJson(result, Array<BlogPostResponseModel>::class.java)
                     onSuccessGetPostList(blogPostResponseArray)
                 } catch (e: Exception) {
                     Log.v("PostListActivity", "urlConnection() exception >> ${e.message}")
@@ -60,9 +68,29 @@ class PostListActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Log.v("SecondActivity", "urlConnection() onFailure >> ${t.message}")
+                Log.v("PostListActivity", "urlConnection() onFailure >> ${t.message}")
             }
         })
+    }
+
+    // coroutine way
+    private fun getPostListOnCoroutineScope() {
+        GlobalScope.launch {
+            try {
+                val response = RetroApi.create().getPostListData().execute()
+                if (response.isSuccessful) {
+                    val result = response.body()?.string()
+                    Log.v("PostListActivity", "urlConnection() onResponse >> $result")
+                    val blogPostResponseArray =
+                        Gson().fromJson(result, Array<BlogPostResponseModel>::class.java)
+                    runOnUiThread { onSuccessGetPostList(blogPostResponseArray) }
+                } else {
+                    Log.v("PostListActivity","urlConnection() exception >> ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.v("PostListActivity", "urlConnection() exception >> ${e.message}")
+            }
+        }
     }
 
 
@@ -71,7 +99,6 @@ class PostListActivity : AppCompatActivity() {
         listAdapter.listData = result.toList()
         postListView.adapter = listAdapter
     }
-
 
 
     private fun getImageList() {
@@ -85,7 +112,8 @@ class PostListActivity : AppCompatActivity() {
                     if (result != null) {
                         Preferences.getInstance(this@PostListActivity).saveDataString = result
                     }
-                    val blogPostResponseArray = Gson().fromJson(result, Array<BlogPostResponseModel>::class.java)
+                    val blogPostResponseArray =
+                        Gson().fromJson(result, Array<BlogPostResponseModel>::class.java)
                     onSuccessGetImageList(blogPostResponseArray)
                 } catch (e: Exception) {
                     Log.v("PostListActivity", "urlConnection() exception >> ${e.message}")
