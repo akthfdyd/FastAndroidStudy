@@ -12,7 +12,7 @@ class SplashActivity : AppCompatActivity() {
     @SuppressLint("HandlerLeak")
     private val handler = object : Handler() {
         override fun handleMessage(msg: Message) {
-            val intent = Intent(this@SplashActivity, LoginActivity::class.java)
+            val intent = Intent(this@SplashActivity, PostListActivity::class.java)
             startActivity(intent)
             finish()
         }

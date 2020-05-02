@@ -6,6 +6,7 @@ import android.util.Log
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_second.*
 import kr.co.saramin.fastandroidstudy.network.Api
+import kr.co.saramin.fastandroidstudy.network.RetroApi
 import kr.co.saramin.fastandroidstudy.vo.BlogPostResponseModel
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -45,7 +46,7 @@ class SecondActivity : AppCompatActivity() {
     // Chapter #7. Retrofit, Gson
     fun urlConnection() {
         val retrofit = Retrofit.Builder()
-                .baseUrl("https://projectevey.000webhostapp.com")
+                .baseUrl(RetroApi.baseUrl)
                 .build()
 
         val service = retrofit.create(Api::class.java)

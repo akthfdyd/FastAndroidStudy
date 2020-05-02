@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit
 
 class RetroApi {
     companion object {
+        val baseUrl = "http://evey.kro.kr"
         fun create(): Api {
             val okHttp = OkHttpClient.Builder()
                 .connectTimeout(1, TimeUnit.MINUTES)
@@ -15,7 +16,7 @@ class RetroApi {
                 .addNetworkInterceptor(StethoInterceptor())
                 .build()
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://projectevey.000webhostapp.com")
+                .baseUrl(baseUrl)
                 .client(okHttp)
                 .build()
             return retrofit.create(Api::class.java)

@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import kr.co.saramin.fastandroidstudy.adapter.PostListAdapter
 import kr.co.saramin.fastandroidstudy.data.Preferences
 import kr.co.saramin.fastandroidstudy.network.RetroApi
+import kr.co.saramin.fastandroidstudy.util.RxBus
 import kr.co.saramin.fastandroidstudy.vo.BlogPostResponseModel
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -41,7 +42,7 @@ class PostListActivity : AppCompatActivity() {
 //        val okHttp = OkHttpClient.Builder().addNetworkInterceptor(StethoInterceptor()).build()
 //
 //        val retrofit = Retrofit.Builder()
-//            .baseUrl("https://projectevey.000webhostapp.com")
+//            .baseUrl("RetroApi.baseUrl")
 //            .client(okHttp)
 //            .build()
 //
@@ -131,6 +132,11 @@ class PostListActivity : AppCompatActivity() {
         val listAdapter = PostListAdapter()
         listAdapter.listData = result.toList()
         postListView.adapter = listAdapter
+
+        val disposable = RxBus.observe().subscribe({
+            Log.v("RxBus", "event posted >> $it")
+        })
+        RxBus.post("EventName1")
     }
 
 

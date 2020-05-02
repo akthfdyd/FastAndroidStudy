@@ -16,6 +16,7 @@ import android.widget.Toast
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 import kr.co.saramin.fastandroidstudy.network.Api
+import kr.co.saramin.fastandroidstudy.network.RetroApi
 import kr.co.saramin.fastandroidstudy.vo.BlogPostResponseModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -172,7 +173,7 @@ class MainActivity : AppCompatActivity() {
     // Chapter #7. Retrofit, Gson
     fun urlConnection() {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://projectevey.000webhostapp.com")
+            .baseUrl(RetroApi.baseUrl)
             .build()
 
         val service = retrofit.create(Api::class.java)
